@@ -1,6 +1,6 @@
 {
   "name": "dsh-ming-cursor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "description": "桌面上的一只 AI 光标：画出来、滑过去、说一句话。不截屏、不点击、不碰键盘。",
