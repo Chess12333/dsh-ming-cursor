@@ -27,8 +27,16 @@
 
 ## 设置页挂在哪（不硬依赖）
 
-- 装了 `dsh-ming-graph`（「她的一生」）→ 挂进它的顶栏，**设置里不再重复出现**；
-- 没装 → 自己注册一个 `settings.section` 设置页。
+**这一页两边共用，但数据只认一份。**
+
+- 装了 `dsh-ming-mousepet`（完整版）→ 这一页照常出现，**读写全走完整版的 `/dsh-ming-mousepet/api/settings`**
+  （`mode→cursorMode`、`holdMs→cursorHoldMs`、`size→cursorSize`、`style→cursorState`），
+  「在屏幕上试一下」改成叫完整版那只光标。改完立刻生效——因为屏幕上画的就是它。
+  （2026-11-10 她：「完整版也要展示光标页，现在没有光标页」；原来这一页在完整版在场时改的是自己的 sidecar，
+  而那个根本不启动，等于按了没反应。）
+- 没有完整版 → 自己的 sidecar 干活，页面的位置照旧：
+  - 装了 `dsh-ming-graph`（「她的一生」）→ 挂进它的顶栏，**设置里不再重复出现**；
+  - 没装 → 自己注册一个 `settings.section` 设置页。
 
 判据是 `window.__MING_TAB_HOST` 在不在（graph 提供的口，见它 README 的「外部页签」一节）。
 两个都是 immediately 加载，先后不定：早到的先进 `window.__MING_TABS_PENDING`，
@@ -92,3 +100,13 @@ PS 5.1 读**没有 BOM** 的 UTF-8 会按 ANSI 解析：中文注释变乱码，
 ## License
 
 MIT
+
+
+## 光标页的源在哪（2026-11-10）
+
+界面**只有一份**：`C:/dsh/dsh-ming-ui/src/cursor-page.js`。
+它被 `sync-cursor-page.mjs` 原样注入到 `client.js` 的标记区（`// >>> 共享光标页` … `// <<< 共享光标页`）。
+
+- 改界面：改源 → `node C:/dsh/dsh-ming-ui/sync-cursor-page.mjs`
+- 验有没有漂：`node C:/dsh/dsh-ming-ui/sync-cursor-page.mjs --check`（可以挂进构建门口）
+- **别手改 client.js 里那一段**——下一次同步会被覆盖，而且两边会长得不一样。

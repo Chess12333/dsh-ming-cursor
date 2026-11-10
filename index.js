@@ -262,7 +262,7 @@ export async function apply(ctx, rawConfig = {}) {
         const body = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}')
         current = normalize({ ...current, ...body })
         await saveSettings(current, log)
-        await pushConfig()
+        if (!conflict) await pushConfig() // 完整版在时这边不画光标，别去碰它没起的 sidecar
         return send(200, { ok: true, settings: current })
       }
       if (route === '/status') {
